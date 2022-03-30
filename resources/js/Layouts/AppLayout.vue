@@ -8,6 +8,7 @@ import JetDropdown from '@/Jetstream/Dropdown.vue';
 import JetDropdownLink from '@/Jetstream/DropdownLink.vue';
 import JetNavLink from '@/Jetstream/NavLink.vue';
 import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue';
+import JetAlert from '@/Jetstream/Alert';
 
 defineProps({
     title: String,
@@ -53,6 +54,16 @@ const logout = () => {
                                     Dashboard
                                 </JetNavLink>
                             </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <JetNavLink :href="route('roles.index')" :active="route().current('roles.index')">
+                                    Roles
+                                </JetNavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <JetNavLink :href="route('users')" :active="route().current('users')">
+                                    Users
+                                </JetNavLink>
+                            </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -81,23 +92,7 @@ const logout = () => {
                                             <!-- Team Management -->
                                             <template v-if="$page.props.jetstream.hasTeamFeatures">
                                                 <div class="block px-4 py-2 text-xs text-gray-400">
-                                                    Manage Team
-                                                </div>
-
-                                                <!-- Team Settings -->
-                                                <JetDropdownLink :href="route('teams.show', $page.props.user.current_team)">
-                                                    Team Settings
-                                                </JetDropdownLink>
-
-                                                <JetDropdownLink v-if="$page.props.jetstream.canCreateTeams" :href="route('teams.create')">
-                                                    Create New Team
-                                                </JetDropdownLink>
-
-                                                <div class="border-t border-gray-100" />
-
-                                                <!-- Team Switcher -->
-                                                <div class="block px-4 py-2 text-xs text-gray-400">
-                                                    Switch Teams
+                                                    Switch Roles
                                                 </div>
 
                                                 <template v-for="team in $page.props.user.all_teams" :key="team.id">
@@ -250,21 +245,6 @@ const logout = () => {
                             <template v-if="$page.props.jetstream.hasTeamFeatures">
                                 <div class="border-t border-gray-200" />
 
-                                <div class="block px-4 py-2 text-xs text-gray-400">
-                                    Manage Team
-                                </div>
-
-                                <!-- Team Settings -->
-                                <JetResponsiveNavLink :href="route('teams.show', $page.props.user.current_team)" :active="route().current('teams.show')">
-                                    Team Settings
-                                </JetResponsiveNavLink>
-
-                                <JetResponsiveNavLink v-if="$page.props.jetstream.canCreateTeams" :href="route('teams.create')" :active="route().current('teams.create')">
-                                    Create New Team
-                                </JetResponsiveNavLink>
-
-                                <div class="border-t border-gray-200" />
-
                                 <!-- Team Switcher -->
                                 <div class="block px-4 py-2 text-xs text-gray-400">
                                     Switch Teams
@@ -304,6 +284,7 @@ const logout = () => {
 
             <!-- Page Content -->
             <main>
+                <JetAlert/>
                 <slot />
             </main>
         </div>

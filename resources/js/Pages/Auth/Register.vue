@@ -12,6 +12,10 @@ const form = useForm({
     name: '',
     email: '',
     password: '',
+    lastName: '',
+    address: '',
+    birthDate: '',
+    phone: '',
     password_confirmation: '',
     terms: false,
 });
@@ -35,6 +39,18 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
+                <JetLabel for="lastName" value="Last name" />
+                <JetInput
+                    id="lastName"
+                    v-model="form.lastName"
+                    type="text"
+                    class="mt-1 block w-full"
+                    required
+                    autofocus
+                    autocomplete="lastName"
+                />
+            </div>
+            <div>
                 <JetLabel for="name" value="Name" />
                 <JetInput
                     id="name"
@@ -42,8 +58,17 @@ const submit = () => {
                     type="text"
                     class="mt-1 block w-full"
                     required
-                    autofocus
                     autocomplete="name"
+                />
+            </div>
+            <div>
+                <JetLabel for="birthDate" value="Birth Date" />
+                <JetInput
+                    id="birthDate"
+                    v-model="form.birthDate"
+                    type="text"
+                    class="mt-1 block w-full"
+                    required
                 />
             </div>
 
@@ -53,6 +78,28 @@ const submit = () => {
                     id="email"
                     v-model="form.email"
                     type="email"
+                    class="mt-1 block w-full"
+                    required
+                />
+            </div>
+
+            <div class="mt-4">
+                <JetLabel for="phone" value="Phone" />
+                <JetInput
+                    id="phone"
+                    v-model="form.phone"
+                    type="text"
+                    class="mt-1 block w-full"
+                    required
+                />
+            </div>
+
+            <div class="mt-4">
+                <JetLabel for="address" value="Address" />
+                <JetInput
+                    id="address"
+                    v-model="form.address"
+                    type="text"
                     class="mt-1 block w-full"
                     required
                 />

@@ -19,6 +19,8 @@ class Team extends JetstreamTeam
      */
     protected $casts = [
         'personal_team' => 'boolean',
+        'is_admin' => 'boolean',
+        'is_default' => 'boolean',
     ];
 
     /**

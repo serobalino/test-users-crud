@@ -24,34 +24,41 @@ class CreateNewUser implements CreatesNewUsers
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
+            'lastName' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
+            'birthDate' => ['required', 'date'],
+            'phone' => ['required', 'string', 'max:10','min:9'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
         return DB::transaction(function () use ($input) {
-            return tap(User::create([
-                'name' => $input['name'],
-                'email' => $input['email'],
-                'password' => Hash::make($input['password']),
-            ]), function (User $user) {
-                $this->createTeam($user);
+            $new = new User();
+            $new->name = $input['name'];
+            $new->lastName = $input['lastName'];
+            $new->address = $input['address'];
+            $new->birthDate = $input['birthDate'];
+            $new->phone = $input['phone'];
+            $new->email = $input['email'];
+            $new->password = Hash::make($input['password']);
+            $new->save();
+            return tap($new, function (User $user) {
+                $this->setDefaultTeam($user);
             });
         });
     }
 
+
     /**
-     * Create a personal team for the user.
-     *
-     * @param  \App\Models\User  $user
-     * @return void
+     * Assig default team
+     * @param User $user
      */
-    protected function createTeam(User $user)
-    {
-        $user->ownedTeams()->save(Team::forceCreate([
-            'user_id' => $user->id,
-            'name' => explode(' ', $user->name, 2)[0]."'s Team",
-            'personal_team' => true,
-        ]));
+    protected function setDefaultTeam(User $user){
+        $team = Team::where('is_default',true)->first();
+        if($team){
+            $user->teams()->attach($team);
+            $user->switchTeam($team);
+        }
     }
 }
