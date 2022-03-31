@@ -106,6 +106,7 @@ export default {
             {
                 label: 'Actions',
                 field: 'actions',
+                sortable: false,
             },
         ]
     }),
