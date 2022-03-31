@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class UpdateRole extends FormRequest
 {
@@ -30,5 +31,12 @@ class UpdateRole extends FormRequest
             'is_admin' => ['boolean'],
             'is_default' => ['boolean'],
         ];
+    }
+
+    public function validationData()
+    {
+        return array_merge($this->request->all(), [
+            'id' => Route::input('role'),
+        ]);
     }
 }

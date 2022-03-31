@@ -33,6 +33,8 @@ class StoreUser extends FormRequest
             'phone' => ['required', 'string', 'max:10','min:9'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', new Password],
+            'roles' => ['required', 'array'],
+            'roles.*' => ['required','exists:teams,id'],
         ];
     }
 }

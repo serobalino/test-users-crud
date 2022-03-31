@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUser;
+use App\Http\Requests\UpdateUser;
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -26,7 +29,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Crud/Users/create');
+        return Inertia::render('Crud/Users/create',['roles'=>Team::all()]);
     }
 
     /**
@@ -35,17 +38,22 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreUser $request)
     {
         $new = new User();
         $new->name = $request->name;
         $new->lastName = $request->lastName;
         $new->phone = $request->phone;
         $new->address = $request->address;
-        $new->birthdate = $request->birthdate;
+        $new->birthdate = $request->birthDate;
         $new->email = $request->email;
         $new->password = Hash::make($request->password);
         $new->save();
+        foreach ($request->roles as $team){
+            $rol = Team::find($team);
+            $new->teams()->attach($rol);
+            $new->switchTeam($rol);
+        }
         return redirect()->route('users.index')->with('message', "The user $new->name was created successfully");
 
     }
@@ -69,7 +77,8 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        return Inertia::render('Crud/Users/edit',['user' => User::find($id)]);
+        $user = User::find($id);
+        return Inertia::render('Crud/Users/edit',['data' => $user,'roles'=>Team::all(),'currrol'=>$user->teams]);
     }
 
     /**
@@ -79,17 +88,23 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUser $request, $id)
     {
         $update = User::find($id);
         $update->name = $request->name;
         $update->lastName = $request->lastName;
         $update->phone = $request->phone;
         $update->address = $request->address;
-        $update->birthdate = $request->birthdate;
-        $update->email = $request->email;
+        $update->birthdate = $request->birthDate;
+        $update->email = $request->email ? $request->email : $update->email;
         $update->password = $request->password ? Hash::make($request->password) : $update->password;
         $update->save();
+        $update->teams()->detach();
+        foreach ($request->roles as $team){
+            $rol = Team::find($team);
+            $update->teams()->attach($rol);
+            $update->switchTeam($rol);
+        }
         return redirect()->route('users.index')->with('message', "The user $update->name was updated successfully");
     }
 

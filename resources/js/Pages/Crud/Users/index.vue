@@ -96,7 +96,7 @@ export default {
                 }
             },
             {
-                label: 'Birthdate',
+                label: 'Birth date',
                 field: 'birthdate',
             },
             {

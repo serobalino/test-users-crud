@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,7 +35,5 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
     Route::resource('/roles',RolesController::class);
-    Route::get('/users', function () {
-        return Inertia::render('Users');
-    })->name('users');
+    Route::resource('/users',UsersController::class);
 });
