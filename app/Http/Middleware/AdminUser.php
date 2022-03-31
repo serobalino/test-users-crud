@@ -16,7 +16,7 @@ class AdminUser
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user()->currentTeam->is_admin) {
+        if (@$request->user()->currentTeam->is_admin) {
             return $next($request);
         }else{
             return redirect()->route('dashboard')->with('message', "You need to have an admin role");

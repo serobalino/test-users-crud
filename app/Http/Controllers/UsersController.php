@@ -6,6 +6,9 @@ use App\Http\Requests\StoreUser;
 use App\Http\Requests\UpdateUser;
 use App\Models\Team;
 use App\Models\User;
+use App\Notifications\UserCreateNotification;
+use App\Notifications\UserDeleteNotification;
+use App\Notifications\UserUpdateNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
@@ -54,6 +57,7 @@ class UsersController extends Controller
             $new->teams()->attach($rol);
             $new->switchTeam($rol);
         }
+        $new->notify(new UserCreateNotification($request));
         return redirect()->route('users.index')->with('message', "The user $new->name was created successfully");
 
     }
@@ -105,6 +109,7 @@ class UsersController extends Controller
             $update->teams()->attach($rol);
             $update->switchTeam($rol);
         }
+        $update->notify(new UserUpdateNotification());
         return redirect()->route('users.index')->with('message', "The user $update->name was updated successfully");
     }
 
@@ -117,6 +122,8 @@ class UsersController extends Controller
     public function destroy($id)
     {
         $delete = User::find($id);
+        $delete->teams()->detach();
+        $delete->notify(new UserDeleteNotification());
         $delete->delete();
         return redirect()->route('users.index')->with('message', "The user $delete->name was deleted successfully");
     }

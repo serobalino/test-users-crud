@@ -98,7 +98,11 @@ class RolesController extends Controller
     public function destroy($id)
     {
         $delete = Team::find($id);
-        $delete->delete();
-        return redirect()->route('roles.index')->with('message', "The role $delete->name was deleted successfully");
+        if(count($delete->users)){
+            return redirect()->route('roles.index')->with('message', "$delete->name cannot be deleted because he has linked users");
+        }else{
+            $delete->delete();
+            return redirect()->route('roles.index')->with('message', "The role $delete->name was deleted successfully");
+        }
     }
 }
