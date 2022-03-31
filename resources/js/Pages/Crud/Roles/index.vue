@@ -91,12 +91,12 @@ export default {
     methods: {
         confirmDel(row){
             this.$swal({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'Delete',
+                text: "Are you sure you want to delete "+row.name+"?",
                 icon: 'warning',
                 showCancelButton: true,
                 showLoaderOnConfirm: true,
-                preConfirm: (login) => {
+                preConfirm: () => {
                     return Inertia.delete(route('roles.destroy',row.id));
                 },
             })
