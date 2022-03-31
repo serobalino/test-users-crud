@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\Rule;
 use Laravel\Fortify\Rules\Password;
 
 class UpdateUser extends FormRequest
@@ -33,7 +34,7 @@ class UpdateUser extends FormRequest
             'address' => ['required', 'string', 'max:255'],
             'birthDate' => ['required', 'date'],
             'phone' => ['required', 'string', 'max:10','min:9'],
-            'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['nullable', 'string', 'email', 'max:255', Rule::unique('users')->ignore(Route::input('user'))],
             'password' => ['nullable', 'string', new Password],
             'roles' => ['required', 'array'],
             'roles.*' => ['required','exists:teams,id'],

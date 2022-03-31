@@ -54,16 +54,18 @@ const logout = () => {
                                     Dashboard
                                 </JetNavLink>
                             </div>
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <JetNavLink :href="route('roles.index')" :active="route().current('roles.index')">
-                                    Roles
-                                </JetNavLink>
-                            </div>
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <JetNavLink :href="route('users.index')" :active="route().current('users.index')">
-                                    Users
-                                </JetNavLink>
-                            </div>
+                            <template v-if="$page.props.user.current_team.is_admin">
+                                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                    <JetNavLink :href="route('roles.index')" :active="route().current('roles.index')">
+                                        Roles
+                                    </JetNavLink>
+                                </div>
+                                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                    <JetNavLink :href="route('users.index')" :active="route().current('users.index')">
+                                        Users
+                                    </JetNavLink>
+                                </div>
+                            </template>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -95,7 +97,7 @@ const logout = () => {
                                                     Switch Roles
                                                 </div>
 
-                                                <template v-for="team in $page.props.user.all_teams" :key="team.id">
+                                                <template v-for="team in $page.props.my_teams" :key="team.id">
                                                     <form @submit.prevent="switchToTeam(team)">
                                                         <JetDropdownLink as="button">
                                                             <div class="flex items-center">
@@ -250,7 +252,7 @@ const logout = () => {
                                     Switch Teams
                                 </div>
 
-                                <template v-for="team in $page.props.user.all_teams" :key="team.id">
+                                <template v-for="team in $page.props.my_teams" :key="team.id">
                                     <form @submit.prevent="switchToTeam(team)">
                                         <JetResponsiveNavLink as="button">
                                             <div class="flex items-center">

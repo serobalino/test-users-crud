@@ -34,6 +34,6 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-    Route::resource('/roles',RolesController::class);
-    Route::resource('/users',UsersController::class);
+    Route::resource('/roles',RolesController::class)->middleware('admin.team');
+    Route::resource('/users',UsersController::class)->middleware('admin.team');
 });
